@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 
 /**
  * zabj_pop - Opcode removes the top element of the stack

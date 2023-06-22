@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 
 /**
  * zabj_swap - Opcode swaps top two elements of the stack

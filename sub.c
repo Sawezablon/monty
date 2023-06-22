@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 
 /**
  * zabj_sub - Opcode subtracts top element from second element

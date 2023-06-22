@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 
 /**
  * zabj_pchar - Opcode prints char at the top of the stack

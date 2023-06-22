@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 
 /**
  * zabj_rotr - Opcode rotates the stack to the bottom

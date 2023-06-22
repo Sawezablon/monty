@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 
 /**
  * zabj_pstr - Opcode prints string starting at the top of the stack

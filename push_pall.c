@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 
 /**
  * zabj_push - Opcode pushes an element to the stack
@@ -32,7 +32,7 @@ void zabj_push(stack_t **h, char **args, unsigned int line_number)
 	}
 }
 
-#include "main.h"
+#include "monty.h"
 
 /**
  * zabj_pall - Opcode prints all values on the stack , from  top to bottom

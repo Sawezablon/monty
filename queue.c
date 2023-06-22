@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 
 /**
  * zabj_queue - Opcode sets the format of the data  to a queue(FIFO).

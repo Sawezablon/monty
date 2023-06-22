@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 
 /**
  * zabj_mod - Opcode computes rest of second top by top element of the stack

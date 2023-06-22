@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 
 /**
  * zabj_stack - Opcode sets the format of the data to a stack(LIFO).
