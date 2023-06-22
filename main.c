@@ -1,116 +1,74 @@
 #include "monty.h"
+#include "lists.h"
 
-int code = 1;
+data_t data = DATA_INIT;
 
 /**
- * main -entry point
+ * monty - helper function for main function
+ * @args: pointer to struct of arguments from main
  *
- * @argc: argument count
- * @argv: argument vector
- * Return: Always 0 (Success)
+ * Description: opens and reads from the file
+ * containing the opcodes, and calls the function
+ * that will find the corresponding executing function
  */
-int main(int argc, char **argv)
+void monty(args_t *args)
 {
-	stack_t *ptr;
-	FILE *file;
-	char *line = NULL, *insert = NULL, que[1024], **tok;
-	int que_no = 0, *num;
+	size_t len = 0;
+	int get = 0;
+	void (*code_func)(stack_t **, unsigned int);
 
-	ptr = NULL;
-	if (argc != 2)
+	if (args->ac != 2)
 	{
-		fprintf(stderr, "USAGE: monty file\n");
+		dprintf(STDERR_FILENO, USAGE);
 		exit(EXIT_FAILURE);
 	}
-	num = &que_no;
-	file = fopen(argv[1], "r");
-	if (file == NULL)
+	data.fptr = fopen(args->av, "r");
+	if (!data.fptr)
 	{
-		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+		dprintf(STDERR_FILENO, FILE_ERROR, args->av);
 		exit(EXIT_FAILURE);
 	}
-	else
+	while (1)
 	{
-		for (; fgets(que, sizeof(que), file) != NULL; ++*num)
+		args->line_number++;
+		get = getline(&(data.line), &len, data.fptr);
+		if (get < 0)
+			break;
+		data.words = strtow(data.line);
+		if (data.words[0] == NULL || data.words[0][0] == '#')
 		{
-			if (que[strlen(que) - 1] == '\n')
-				que[strlen(que) - 1] = '\0';
-			line = que;
-			insert = _space(line);
-			if (insert[0] == '\0' || insert[0] == '#' || insert[0] == '\n')
-				continue;
-			tok = stack_q(insert);
-			_opcode(tok, &ptr, num);
-			free(tok);
-			if (code == -1)
-				break;
+			free_all(0);
+			continue;
 		}
+		code_func = get_func(data.words);
+		if (!code_func)
+		{
+			dprintf(STDERR_FILENO, UNKNOWN, args->line_number, data.words[0]);
+			free_all(1);
+			exit(EXIT_FAILURE);
+		}
+		code_func(&(data.stack), args->line_number);
+		free_all(0);
 	}
-	fclose(file);
-	if (code == -1)
-		exit(EXIT_FAILURE);
-	free_monty(&ptr);
-	return (0);
+	free_all(1);
 }
 
 /**
- * _instruct - Check instruction
+ * main - entry point for monty bytecode interpreter
+ * @argc: number of arguments
+ * @argv: array of arguments
  *
- * @opc: opcode
- * @tok: arguments
- * Return: 1 or 0
+ * Return: EXIT_SUCCESS or EXIT_FAILURE
  */
-int _instruct(instruction_t *opc, char **tok)
+int main(int argc, char *argv[])
 {
-	int j = 0;
+	args_t args;
 
-	while (opc[j].opcode)
-	{
-		if (strcmp(opc[j].opcode, tok[0]) == 0)
-			return (0);
-		j++;
-	}
+	args.av = argv[1];
+	args.ac = argc;
+	args.line_number = 0;
 
-	return (1);
-}
+	monty(&args);
 
-/**
- * print_monty - print elements
- *
- * @struc: parameter node
- */
-void print_monty(stack_t **struc)
-{
-	stack_t *tmp;
-
-	if (*struc == NULL || struc == NULL)
-		return;
-
-	tmp = *struc;
-	while (tmp != NULL)
-	{
-		printf("%d\n", tmp->n);
-		tmp = tmp->next;
-	}
-}
-
-/**
- * free_monty - free elements
- *
- * @head: parameter
- */
-void free_monty(stack_t **head)
-{
-	stack_t *current = *head;
-	stack_t *next;
-
-	if (*head == NULL)
-		return;
-
-	while (current != NULL)
-	{
-		next = current->next;
-		free(current);
-		current = next;
-	}
+	return (EXIT_SUCCESS);
 }
