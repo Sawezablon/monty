@@ -2,22 +2,22 @@
 
 
 /**
- * _div - Opcode divides the second top element by top element
+ * _mod - Opcode computes rest of second top by top element of the stack
  *
  * @stack: Indicates a pointer to the stack
  *
  * @line_number: Indicates different operations in the stack
  */
-void _div(stack_t **stack, unsigned int line_number)
+void _mod(stack_t **stack, unsigned int line_number)
 {
-	int div = 0;
+	int mod = 0;
 	stack_t *node = NULL;
 	stack_t *node_0 = _get_node_index(*stack, 0);
 	stack_t *node_1 = _get_node_index(*stack, 1);
 
 	if (_length(*stack) < 2)
 	{
-		dprintf(STDERR_FILENO, DIV_FAIL, line_number);
+		dprintf(STDERR_FILENO, MOD_FAIL, line_number);
 		_release(1);
 		exit(EXIT_FAILURE);
 	}
@@ -29,10 +29,10 @@ void _div(stack_t **stack, unsigned int line_number)
 		exit(EXIT_FAILURE);
 	}
 
-	div = node_1->n / node_0->n;
+	mod = node_1->n % node_0->n;
 	_delete(stack, 0);
 	_delete(stack, 0);
-	node = _addnode(stack, div);
+	node = _addnode(stack, mod);
 	if (!node)
 	{
 		dprintf(STDERR_FILENO, MALLOC_FAIL);
